@@ -1,0 +1,27 @@
+---
+title: "HW4"
+author: "Atharv Vani"
+date: "2025-02-11"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(dplyr)
+library(knitr)
+library(ggplot2)
+library(tidyverse)
+library(mosaic)
+```
+
+
+## Name: Atharv Vani
+## UT EID: amv4278
+## Github Link:
+
+
+## Problem 1A
+
+```{r, dev = 'pdf'}
+
+```
