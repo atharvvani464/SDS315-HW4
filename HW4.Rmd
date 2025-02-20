@@ -17,7 +17,7 @@ library(mosaic)
 
 ## Name: Atharv Vani
 ## UT EID: amv4278
-## Github Link:
+## Github Link: https://github.com/atharvvani464/SDS315-HW4
 
 
 ## Problem 1
@@ -112,3 +112,5 @@ if (p_value < 0.05) {
   print("The p-value is not sufficiently low to conclude that the jury selection process is biased.")
 }
 ```
+
+
