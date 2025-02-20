@@ -20,8 +20,95 @@ library(mosaic)
 ## Github Link:
 
 
-## Problem 1A
+## Problem 1
 
 ```{r, dev = 'pdf'}
+n_trades <- 2021
+p_flag <- 0.024
+observed_flags <- 70
+n_simulations <- 100000
 
+simulated_flags <- rbinom(n_simulations, size = n_trades, prob = p_flag)
+p_value <- mean(simulated_flags >= observed_flags)
+
+ggplot(data.frame(simulated_flags), aes(x = simulated_flags)) +
+  geom_histogram(binwidth = 1) +
+  geom_vline(xintercept = observed_flags, linetype = "dashed") +
+  labs(title = "Monte Carlo Distribution of Flagged Trades Under Null Hypothesis",
+       x = "Number of Flagged Trades", y = "Frequency")
+
+print(paste("P-Value:", p_value))
+
+if (p_value < 0.05) {
+  print("The p-value is low, suggesting that the number of flagged trades may be higher than expected under the null hypothesis.")
+} else {
+  print("The p-value is not sufficiently low to conclude that the number of flagged trades is unusually high.")
+}
+```
+Null Hypothesis: The null hypothesis being tested is that the rate of flagged trades is equal to the baseline probability of 2.4%.
+Test Statistic: The test statistic used is the number of flagged trades observed.
+A Monte Carlo simulation is used to generate the probability distribution of flagged trades under the null hypothesis. The p-value is computed to assess whether the observed number of flagged trades is significantly different from expectation.
+
+## Problem 2
+
+```{r, dev = 'pdf'}
+total_inspections <- 1500
+p_violation <- 0.03
+n_gourmet_inspections <- 50
+observed_violations <- 8
+n_simulations <- 100000
+
+simulated_violations <- rbinom(n_simulations, size = n_gourmet_inspections, prob = p_violation)
+
+p_value <- mean(simulated_violations >= observed_violations)
+
+ggplot(data.frame(simulated_violations), aes(x = simulated_violations)) +
+  geom_histogram(binwidth = 1) +
+  geom_vline(xintercept = observed_violations, linetype = "dashed") +
+  labs(title = "Monte Carlo Distribution of Violations Under Null Hypothesis",
+       x = "Number of Violations", y = "Frequency")
+
+print(paste("P-Value:", p_value))
+
+if (p_value < 0.05) {
+  print("The p-value is low, suggesting that Gourmet Bites may have a higher violation rate than expected under the null hypothesis.")
+} else {
+  print("The p-value is not sufficiently low to conclude that Gourmet Bites has an unusually high violation rate.")
+}
+```
+
+
+Null Hypothesis: The null hypothesis being tested is that Gourmet Bites has the same health code violation rate as the citywide average of 3%.
+Test Statistic: The test statistic used is the number of health code violations observed at Gourmet Bites during inspections.
+A Monte Carlo simulation is performed to estimate the probability distribution of this test statistic under the null hypothesis. The p-value is computed to determine whether the observed violation rate is significantly different from the expected rate.
+
+## Problem 3
+```{r, dev = 'pdf'}
+observed_counts <- c(85, 56, 59, 27, 13)
+total_jurors <- sum(observed_counts)
+expected_proportions <- c(0.30, 0.25, 0.20, 0.15, 0.10)
+expected_counts <- total_jurors * expected_proportions
+chi_squared_statistic <- function(observed, expected) {
+  sum((observed - expected)^2 / expected)
+}
+num_simulations <- 10000
+chi2_sim <- do(num_simulations) * {
+  simulated_counts <- rmultinom(1, total_jurors, expected_proportions)
+  this_chi2 <- chi_squared_statistic(simulated_counts, expected_counts)
+  c(chi2 = this_chi2)
+}
+
+ggplot(chi2_sim) + 
+  geom_histogram(aes(x = chi2), bins = 30)
+
+my_chi2 <- chi_squared_statistic(observed_counts, expected_counts)
+
+p_value <- mean(chi2_sim$chi2 >= my_chi2)
+print(paste("P-Value:", p_value))
+
+if (p_value < 0.05) {
+  print("The p-value is low, suggesting that the jury selection process overseen by this judge significantly deviates from the county’s expected demographic distribution.")
+} else {
+  print("The p-value is not sufficiently low to conclude that the jury selection process is biased.")
+}
 ```
